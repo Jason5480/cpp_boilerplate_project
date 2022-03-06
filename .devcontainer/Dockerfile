@@ -22,7 +22,7 @@ USER $USERNAME
 # Install editors
 RUN sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        neovim emacs nano mousepad
+    neovim emacs nano mousepad
 
 # Install necessary packages available from standard repos
 RUN sudo apt-get update -qq && \
@@ -31,7 +31,6 @@ RUN sudo apt-get update -qq && \
     openssh-client gpg-agent socat rsync \
     make ninja-build git \
     python3 python3-pip
-    
 
 # User-settable versions:
 # This Dockerfile should support gcc-[7, 8, 9, 10, 11] and clang-[10, 11, 12, 13]
@@ -59,7 +58,7 @@ RUN sudo wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add
     sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     clang-${LLVM_VER} lldb-${LLVM_VER} lld-${LLVM_VER} clangd-${LLVM_VER} \
-        llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev clang-tidy-${LLVM_VER} clang-format-${LLVM_VER}
+    llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev clang-tidy-${LLVM_VER} clang-format-${LLVM_VER}
 
 # Set the default clang-tidy, so CMake can find it
 RUN sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy $(which clang-tidy-${LLVM_VER}) 1
@@ -90,13 +89,15 @@ RUN sudo python3 -m pip install --upgrade pip setuptools cmake_format conan && \
 # Conan runs some install commands, and will prepend `sudo` to
 # these commands, unless `CONAN_SYSREQUIRES_SUDO=0` is in your env variables.
 # Superuser has a `EUID == 0` and doesn't need sudo to run commands.
+# See docs at https://docs.conan.io/en/latest/reference/env_vars.html?highlight=conan_sysrequires_mode#conan-sysrequires-sudo
 ENV CONAN_SYSREQUIRES_SUDO ${USER_UID}
 # Some packages request that Conan use the system package manager to install
 # a few dependencies. This flag allows Conan to proceed with these installations;
 # leaving this flag undefined can cause some installation failures.
+# See docs at https://docs.conan.io/en/latest/reference/env_vars.html?highlight=conan_sysrequires_mode#conan-sysrequires-mode
 ENV CONAN_SYSREQUIRES_MODE enabled
 # To achieve reporoducable builds and dependencies revisions should be enabled.
-# For more check https://docs.conan.io/en/latest/versioning/revisions.html
+# See docs at https://docs.conan.io/en/latest/versioning/revisions.html
 ENV CONAN_REVISIONS_ENABLED 1
 
 # Install include-what-you-use
@@ -105,11 +106,11 @@ ENV IWYU_BUILD ${IWYU}/build
 ENV IWYU_SRC ${IWYU}/include-what-you-use
 RUN sudo mkdir -p ${IWYU_BUILD} && \
     sudo git clone --branch clang_${LLVM_VER} \
-        https://github.com/include-what-you-use/include-what-you-use.git \
-        ${IWYU_SRC}
+    https://github.com/include-what-you-use/include-what-you-use.git \
+    ${IWYU_SRC}
 RUN sudo CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
-        -B ${IWYU_BUILD} \
-        -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
+    -B ${IWYU_BUILD} \
+    -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
     sudo cmake --build ${IWYU_BUILD} -j && \
     sudo cmake --install ${IWYU_BUILD}
 
@@ -125,11 +126,6 @@ RUN sudo ln -s $(readlink -f /usr/lib/clang/${LLVM_VER}/include) \
 RUN sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     doxygen graphviz ccache cppcheck
-
-# Install editors
-#RUN sudo apt-get update -qq && \
-#    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-#    neovim emacs nano
 
 ## Cleanup cached apt data we don't need anymore
 RUN sudo apt-get autoremove -y && sudo apt-get clean && \
