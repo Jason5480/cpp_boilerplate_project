@@ -94,11 +94,6 @@ ENV CONAN_SYSREQUIRES_SUDO 1
 # leaving this flag undefined can cause some installation failures.
 ENV CONAN_SYSREQUIRES_MODE enabled
 
-# Install optional dependecies
-RUN sudo apt-get update -qq && \
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    doxygen graphviz ccache cppcheck
-
 # Install include-what-you-use
 ENV IWYU /home/iwyu
 ENV IWYU_BUILD ${IWYU}/build
@@ -120,6 +115,16 @@ RUN sudo CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
 RUN sudo mkdir -p $(include-what-you-use -print-resource-dir 2>/dev/null)
 RUN sudo ln -s $(readlink -f /usr/lib/clang/${LLVM_VER}/include) \
     $(include-what-you-use -print-resource-dir 2>/dev/null)/include
+
+# Install optional dependecies
+RUN sudo apt-get update -qq && \
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    doxygen graphviz ccache cppcheck
+
+# Install editors
+#RUN sudo apt-get update -qq && \
+#    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+#    neovim emacs nano
 
 ## Cleanup cached apt data we don't need anymore
 RUN sudo apt-get autoremove -y && sudo apt-get clean && \
