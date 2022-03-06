@@ -1,9 +1,6 @@
-# [Choice] bionic (18.04), focal (20.04)
+# [Options] bionic (18.04), focal (20.04)
 ARG VARIANT="focal"
 FROM ubuntu:${VARIANT}
-
-# Restate the variant to use it later on in the llvm and cmake installations
-ARG VARIANT
 
 ARG USERNAME="user"
 ARG USER_UID=1000
@@ -49,6 +46,9 @@ RUN sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
 # Set gcc-${GCC_VER} as default gcc
 RUN sudo update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 100
 RUN sudo update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VER}) 100
+
+# Restate the variant to use it in the llvm and cmake installations. [Options] bionic (18.04), focal (20.04)
+ARG VARIANT
 
 ARG LLVM_VER="13"
 # Add clang-${LLVM_VER}
