@@ -95,6 +95,9 @@ ENV CONAN_SYSREQUIRES_SUDO ${USER_UID}
 # a few dependencies. This flag allows Conan to proceed with these installations;
 # leaving this flag undefined can cause some installation failures.
 ENV CONAN_SYSREQUIRES_MODE enabled
+# To achieve reporoducable builds and dependencies revisions should be enabled.
+# For more check https://docs.conan.io/en/latest/versioning/revisions.html
+ENV CONAN_REVISIONS_ENABLED 1
 
 # Install include-what-you-use
 ENV IWYU /home/iwyu
