@@ -86,9 +86,11 @@ RUN sudo python3 -m pip install --upgrade pip setuptools cmake_format conan && \
     conan --version
 
 # By default, anything you run in Docker is done as superuser.
-# Conan runs some install commands as superuser, and will prepend `sudo` to
+# This is not the case after the `USER $USERNAME` command is called.
+# Conan runs some install commands, and will prepend `sudo` to
 # these commands, unless `CONAN_SYSREQUIRES_SUDO=0` is in your env variables.
-ENV CONAN_SYSREQUIRES_SUDO 1
+# Superuser has a `EUID == 0` and doesn't need sudo to run commands.
+ENV CONAN_SYSREQUIRES_SUDO ${USER_UID}
 # Some packages request that Conan use the system package manager to install
 # a few dependencies. This flag allows Conan to proceed with these installations;
 # leaving this flag undefined can cause some installation failures.
