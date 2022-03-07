@@ -5,6 +5,7 @@ FROM ubuntu:${VARIANT}
 ARG USERNAME="user"
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG USE_ROOT
 
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -15,9 +16,6 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
-
-# Log in as user
-USER $USERNAME
 
 # Install editors
 RUN sudo apt-get update -qq && \
@@ -90,7 +88,11 @@ RUN sudo python3 -m pip install --upgrade pip setuptools cmake_format conan && \
 # these commands, unless `CONAN_SYSREQUIRES_SUDO=0` is in your env variables.
 # Superuser has a `EUID == 0` and doesn't need sudo to run commands.
 # See docs at https://docs.conan.io/en/latest/reference/env_vars.html?highlight=conan_sysrequires_mode#conan-sysrequires-sudo
-ENV CONAN_SYSREQUIRES_SUDO ${USER_UID}
+# if --build-arg USE_ROOT=1, set USE_SUDO to 0 or set to null otherwise.
+ENV USE_SUDO=${USE_ROOT:+0}
+# if USE_SUDO is null, set it to 1 (or leave as is otherwise).
+ENV USE_SUDO=${USE_SUDO:-1}
+ENV CONAN_SYSREQUIRES_SUDO ${USE_SUDO}
 # Some packages request that Conan use the system package manager to install
 # a few dependencies. This flag allows Conan to proceed with these installations;
 # leaving this flag undefined can cause some installation failures.
@@ -139,5 +141,12 @@ ENV CXX=${USE_CLANG:+"clang++"}
 # if CC is null, set it to 'gcc' (or leave as is otherwise).
 ENV CC=${CC:-"gcc"}
 ENV CXX=${CXX:-"g++"}
+
+# if --build-arg USE_ROOT=1, set CURRENT_USER to 'root' or set to null otherwise.
+ENV CURRENT_USER=${USE_ROOT:+"root"}
+# if CURRENT_USER is null, set it to 'USERNAME' (or leave as is otherwise).
+ENV CURRENT_USER=${CURRENT_USER:-${USERNAME}}
+# Login as root or user
+USER ${CURRENT_USER}
 
 CMD ["/bin/bash"]
