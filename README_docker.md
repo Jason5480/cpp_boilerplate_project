@@ -28,11 +28,24 @@ may do so like this:
 docker build --tag=my_project:latest --build-arg USE_CLANG=1 .
 ```
 
-You will be logged in as root, so you will see the `#` symbol as your prompt.
-You will be in a directory that contains a copy of the `cpp_starter_project`;
+You will be logged in as user by default. To change the user name you may do so with the `USERNAME` argument like this:
+
+```bash
+docker build --tag=myproject:latest --build-arg USERNAME="jason" .
+```
+
+If you want to login as a superuser (not recomended) you may do so like this:
+
+```bash
+docker build --tag=my_project:latest --build-arg USE_ROOT=1 .
+```
+
+Then you will loged in as root and you will see the `#` symbol as your prompt.
+
+You will be in a directory that contains a copy of the `cpp_boilerplate_project`;
 any changes you make to your local copy will not be updated in the Docker image
 until you rebuild it.
-If you need to mount your local copy directly in the Docker image, see
+It is recomended to mount your local copy directly in the Docker image, see
 [Docker volumes docs](https://docs.docker.com/storage/volumes/).
 TLDR:
 
@@ -45,18 +58,18 @@ docker run -it \
 You can configure and build [as directed above](#build) using these commands:
 
 ```bash
-/starter_project# mkdir build
-/starter_project# cmake -S . -B ./build
-/starter_project# cmake --build ./build
+/cpp_boilerplate_project# mkdir build
+/cpp_boilerplate_project# cmake -S . -B ./build
+/cpp_boilerplate_project# cmake --build ./build
 ```
 
 You can configure and build using `clang-13`, without rebuilding the container,
 with these commands:
 
 ```bash
-/starter_project# mkdir build
-/starter_project# CC=clang CXX=clang++ cmake -S . -B ./build
-/starter_project# cmake --build ./build
+/cpp_boilerplate_project# mkdir build
+/cpp_boilerplate_project# CC=clang CXX=clang++ cmake -S . -B ./build
+/cpp_boilerplate_project# cmake --build ./build
 ```
 
 The `ccmake` tool is also installed; you can substitute `ccmake` for `cmake` to
