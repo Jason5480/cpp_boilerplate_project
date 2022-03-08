@@ -8,14 +8,14 @@ ARG USER_GID=$USER_UID
 ARG USE_ROOT
 
 # Create the user
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+RUN groupadd --gid $USER_GID $USERNAME && \
+    useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
     #
     # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
-    && apt-get update \
-    && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+    apt-get update && \
+    apt-get install -y sudo && \
+    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
+    chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Install editors
 RUN sudo apt-get update -qq && \
@@ -77,6 +77,28 @@ RUN sudo wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/de
     sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake cmake-curses-gui
 
+# Install include-what-you-use
+ENV IWYU /home/iwyu
+ENV IWYU_BUILD ${IWYU}/build
+ENV IWYU_SRC ${IWYU}/include-what-you-use
+RUN sudo mkdir -p ${IWYU_BUILD} && \
+    sudo git clone --branch clang_${LLVM_VER} \
+    https://github.com/include-what-you-use/include-what-you-use.git \
+    ${IWYU_SRC}
+RUN sudo CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
+    -B ${IWYU_BUILD} \
+    -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
+    sudo cmake --build ${IWYU_BUILD} -j && \
+    sudo cmake --install ${IWYU_BUILD}
+
+# Per https://github.com/include-what-you-use/include-what-you-use#how-to-install:
+# `You need to copy the Clang include directory to the expected location before
+#  running (similarly, use include-what-you-use -print-resource-dir to learn
+#  exactly where IWYU wants the headers).`
+RUN sudo mkdir -p $(include-what-you-use -print-resource-dir 2>/dev/null)
+RUN sudo ln -s $(readlink -f /usr/lib/clang/${LLVM_VER}/include) \
+    $(include-what-you-use -print-resource-dir 2>/dev/null)/include
+
 # Install python packages cmake-format conan etc.
 RUN sudo python3 -m pip install --upgrade pip setuptools cmake_format conan && \
     cmake-format --version && \
@@ -101,28 +123,6 @@ ENV CONAN_SYSREQUIRES_MODE enabled
 # To achieve reporoducable builds and dependencies revisions should be enabled.
 # See docs at https://docs.conan.io/en/latest/versioning/revisions.html
 ENV CONAN_REVISIONS_ENABLED 1
-
-# Install include-what-you-use
-ENV IWYU /home/iwyu
-ENV IWYU_BUILD ${IWYU}/build
-ENV IWYU_SRC ${IWYU}/include-what-you-use
-RUN sudo mkdir -p ${IWYU_BUILD} && \
-    sudo git clone --branch clang_${LLVM_VER} \
-    https://github.com/include-what-you-use/include-what-you-use.git \
-    ${IWYU_SRC}
-RUN sudo CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
-    -B ${IWYU_BUILD} \
-    -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
-    sudo cmake --build ${IWYU_BUILD} -j && \
-    sudo cmake --install ${IWYU_BUILD}
-
-# Per https://github.com/include-what-you-use/include-what-you-use#how-to-install:
-# `You need to copy the Clang include directory to the expected location before
-#  running (similarly, use include-what-you-use -print-resource-dir to learn
-#  exactly where IWYU wants the headers).`
-RUN sudo mkdir -p $(include-what-you-use -print-resource-dir 2>/dev/null)
-RUN sudo ln -s $(readlink -f /usr/lib/clang/${LLVM_VER}/include) \
-    $(include-what-you-use -print-resource-dir 2>/dev/null)/include
 
 # Install optional dependecies
 RUN sudo apt-get update -qq && \
