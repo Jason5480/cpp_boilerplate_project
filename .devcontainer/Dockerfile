@@ -20,15 +20,15 @@ RUN groupadd --gid $USER_GID $USERNAME && \
 # Install editors
 RUN sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    neovim emacs nano mousepad
+        neovim emacs nano mousepad
 
 # Install necessary packages available from standard repos
 RUN sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    apt-utils software-properties-common wget file zip \
-    openssh-client gpg-agent socat rsync \
-    make ninja-build git \
-    python3 python3-pip
+        apt-utils software-properties-common wget file zip \
+        openssh-client gpg-agent socat rsync \
+        make ninja-build git \
+        python3 python3-pip
 
 # User-settable versions:
 # This Dockerfile should support gcc-[7, 8, 9, 10, 11] and clang-[10, 11, 12, 13]
@@ -38,7 +38,7 @@ ARG GCC_VER="11"
 RUN sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    gcc-${GCC_VER} g++-${GCC_VER} gdb
+        gcc-${GCC_VER} g++-${GCC_VER} gdb
 
 # Set gcc-${GCC_VER} as default gcc
 RUN sudo update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 100
@@ -55,8 +55,8 @@ RUN sudo wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add
     sudo add-apt-repository -y "deb ${LLVM_URL} ${LLVM_PKG} main" && \
     sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    clang-${LLVM_VER} lldb-${LLVM_VER} lld-${LLVM_VER} clangd-${LLVM_VER} \
-    llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev clang-tidy-${LLVM_VER} clang-format-${LLVM_VER}
+        clang-${LLVM_VER} lldb-${LLVM_VER} lld-${LLVM_VER} clangd-${LLVM_VER} \
+        llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev clang-tidy-${LLVM_VER} clang-format-${LLVM_VER}
 
 # Set the default clang-tidy, so CMake can find it
 RUN sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy $(which clang-tidy-${LLVM_VER}) 1
@@ -72,22 +72,22 @@ RUN sudo update-alternatives --install /usr/bin/clang++ clang++ $(which clang++-
 ARG CMAKE_URL="https://apt.kitware.com/ubuntu/"
 ARG CMAKE_PKG=${VARIANT}
 RUN sudo wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
-    | sudo gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
+        | sudo gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
     sudo apt-add-repository -y "deb ${CMAKE_URL} ${CMAKE_PKG} main" && \
     sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake cmake-curses-gui
 
 # Install include-what-you-use
-ENV IWYU /home/iwyu
-ENV IWYU_BUILD ${IWYU}/build
-ENV IWYU_SRC ${IWYU}/include-what-you-use
+ENV IWYU=/home/iwyu
+ENV IWYU_BUILD=${IWYU}/build
+ENV IWYU_SRC=${IWYU}/include-what-you-use
 RUN sudo mkdir -p ${IWYU_BUILD} && \
     sudo git clone --branch clang_${LLVM_VER} \
-    https://github.com/include-what-you-use/include-what-you-use.git \
-    ${IWYU_SRC}
+        https://github.com/include-what-you-use/include-what-you-use.git \
+        ${IWYU_SRC}
 RUN sudo CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
-    -B ${IWYU_BUILD} \
-    -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
+        -B ${IWYU_BUILD} \
+        -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
     sudo cmake --build ${IWYU_BUILD} -j && \
     sudo cmake --install ${IWYU_BUILD}
 
@@ -97,7 +97,7 @@ RUN sudo CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
 #  exactly where IWYU wants the headers).`
 RUN sudo mkdir -p $(include-what-you-use -print-resource-dir 2>/dev/null)
 RUN sudo ln -s $(readlink -f /usr/lib/clang/${LLVM_VER}/include) \
-    $(include-what-you-use -print-resource-dir 2>/dev/null)/include
+        $(include-what-you-use -print-resource-dir 2>/dev/null)/include
 
 # Install python packages cmake-format conan etc.
 RUN sudo python3 -m pip install --upgrade pip setuptools cmake_format conan && \
@@ -114,20 +114,20 @@ RUN sudo python3 -m pip install --upgrade pip setuptools cmake_format conan && \
 ENV USE_SUDO=${USE_ROOT:+0}
 # if USE_SUDO is null, set it to 1 (or leave as is otherwise).
 ENV USE_SUDO=${USE_SUDO:-1}
-ENV CONAN_SYSREQUIRES_SUDO ${USE_SUDO}
+ENV CONAN_SYSREQUIRES_SUDO=${USE_SUDO}
 # Some packages request that Conan use the system package manager to install
 # a few dependencies. This flag allows Conan to proceed with these installations;
 # leaving this flag undefined can cause some installation failures.
 # See docs at https://docs.conan.io/en/latest/reference/env_vars.html?highlight=conan_sysrequires_mode#conan-sysrequires-mode
-ENV CONAN_SYSREQUIRES_MODE enabled
+ENV CONAN_SYSREQUIRES_MODE=enabled
 # To achieve reporoducable builds and dependencies revisions should be enabled.
 # See docs at https://docs.conan.io/en/latest/versioning/revisions.html
-ENV CONAN_REVISIONS_ENABLED 1
+ENV CONAN_REVISIONS_ENABLED=1
 
 # Install optional dependecies
 RUN sudo apt-get update -qq && \
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    doxygen graphviz ccache cppcheck
+        doxygen graphviz ccache cppcheck
 
 ## Cleanup cached apt data we don't need anymore
 RUN sudo apt-get autoremove -y && sudo apt-get clean && \
