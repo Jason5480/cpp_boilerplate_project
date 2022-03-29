@@ -7,7 +7,7 @@
 		// Update 'VARIANT' to pick an Ubuntu OS version. Options: [bionic, focal]. Default: focal
 		// Update 'USERNAME' to set the non-root user name. Also use that same name in "remoteUser" setting to login with VSCode to the container. Default: user
 		// Update 'GCC_VER' to pick a gcc and g++ version. Options: [7, 8, 9, 10, 11]. Default: 11
-		// Update 'LLVM_VER' to pick clang version. Options: [10, 11, 12, 13]. Default: 13
+		// Update 'LLVM_VER' to pick clang version. Options: [10, 11, 12, 13, 14]. Default: 14
 		// Update 'USE_CLANG' to set clang as the default C and C++ compiler. Options: [1, null]. Default null
 		// Update 'USE_ROOT' to login as the root user with superuser rights (not recomended). Also set the "remoteUser" setting to "root" to login with VSCode as the superuser. Options: [1, null]. Default null
 		"args": {

@@ -47,7 +47,7 @@ RUN sudo update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VER}) 
 # Restate the variant to use it in the llvm and cmake installations. [Options] bionic (18.04), focal (20.04)
 ARG VARIANT
 
-ARG LLVM_VER="13"
+ARG LLVM_VER="14"
 # Add clang-${LLVM_VER}
 ARG LLVM_URL="http://apt.llvm.org/${VARIANT}/"
 ARG LLVM_PKG="llvm-toolchain-${VARIANT}-${LLVM_VER}"
