@@ -10,7 +10,7 @@
             "name": "config-common",
             "description": "General settings that apply to all configurations",
             "hidden": true,
-            "generator": "Ninja"
+            "generator": "Ninja Multi-Config"
         },
         {
             "name": "config-windows-common",
@@ -71,9 +71,9 @@
             }
         },
         {
-            "name": "windows-msvc-debug-developer-mode",
-            "displayName": "msvc Debug (Developer Mode)",
-            "description": "Target Windows with the msvc compiler, debug build type",
+            "name": "windows-msvc-developer",
+            "displayName": "msvc (Developer Mode)",
+            "description": "Target Windows with the msvc compiler using Developer Mode",
             "inherits": [
                 "config-windows-common",
                 "config-developer-mode"
@@ -85,23 +85,9 @@
             }
         },
         {
-            "name": "windows-msvc-release-developer-mode",
-            "displayName": "msvc Release (Developer Mode)",
-            "description": "Target Windows with the msvc compiler, release build type",
-            "inherits": [
-                "config-windows-common",
-                "config-developer-mode"
-            ],
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            }
-        },
-        {
-            "name": "windows-msvc-debug-user-mode",
-            "displayName": "msvc Debug (User Mode)",
-            "description": "Target Windows with the msvc compiler, debug build type",
+            "name": "windows-msvc-user",
+            "displayName": "msvc (User Mode)",
+            "description": "Target Windows with the msvc compiler using User Mode",
             "inherits": [
                 "config-windows-common",
                 "config-user-mode"
@@ -113,23 +99,9 @@
             }
         },
         {
-            "name": "windows-msvc-release-user-mode",
-            "displayName": "msvc Release (User Mode)",
-            "description": "Target Windows with the msvc compiler, release build type",
-            "inherits": [
-                "config-windows-common",
-                "config-user-mode"
-            ],
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            }
-        },
-        {
-            "name": "windows-clang-debug",
-            "displayName": "clang Debug",
-            "description": "Target Windows with the clang compiler, debug build type",
+            "name": "windows-clang",
+            "displayName": "clang",
+            "description": "Target Windows with the clang compiler",
             "inherits": "config-windows-common",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang-cl",
@@ -143,25 +115,9 @@
             }
         },
         {
-            "name": "windows-clang-release",
-            "displayName": "clang Release",
-            "description": "Target Windows with the clang compiler, release build type",
-            "inherits": "config-windows-common",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang-cl",
-                "CMAKE_CXX_COMPILER": "clang-cl",
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            },
-            "vendor": {
-                "microsoft.com/VisualStudioSettings/CMake/1.0": {
-                    "intelliSenseMode": "windows-clang-x64"
-                }
-            }
-        },
-        {
-            "name": "unixlike-gcc-debug",
-            "displayName": "gcc Debug",
-            "description": "Target Unix-like OS with the gcc compiler, debug build type",
+            "name": "unixlike-gcc",
+            "displayName": "gcc",
+            "description": "Target Unix-like OS with the gcc compiler",
             "inherits": "config-unixlike-common",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "gcc",
@@ -170,37 +126,91 @@
             }
         },
         {
-            "name": "unixlike-gcc-release",
-            "displayName": "gcc Release",
-            "description": "Target Unix-like OS with the gcc compiler, release build type",
-            "inherits": "config-unixlike-common",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            }
-        },
-        {
-            "name": "unixlike-clang-debug",
-            "displayName": "clang Debug",
-            "description": "Target Unix-like OS with the clang compiler, debug build type",
+            "name": "unixlike-clang",
+            "displayName": "clang",
+            "description": "Target Unix-like OS with the clang compiler",
             "inherits": "config-unixlike-common",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-common-debug",
+            "description": "Set build type to Debug",
+            "hidden": true,
+            "configuration": "Debug"
         },
         {
-            "name": "unixlike-clang-release",
-            "displayName": "clang Release",
-            "description": "Target Unix-like OS with the clang compiler, release build type",
-            "inherits": "config-unixlike-common",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            }
+            "name": "build-common-release",
+            "description": "Set build type to Release",
+            "hidden": true,
+            "configuration": "Release"
+        },
+        {
+            "name": "build-common-relwithdebinfo",
+            "description": "Set build type to Release",
+            "hidden": true,
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "build-windows-msvc-developer-debug",
+            "displayName": "Debug",
+            "description": "Build msvc debug on windows (Developer Mode)",
+            "inherits": "build-common-debug",
+            "configurePreset": "windows-msvc-developer"
+        },
+        {
+            "name": "build-windows-msvc-user-debug",
+            "displayName": "Debug",
+            "description": "Build msvc debug on windows (User Mode)",
+            "inherits": "build-common-debug",
+            "configurePreset": "windows-msvc-user"
+        },
+        {
+            "name": "build-windows-msvc-developer-release",
+            "displayName": "Release",
+            "description": "Build msvc release on windows (Developer Mode)",
+            "inherits": "build-common-release",
+            "configurePreset": "windows-msvc-developer"
+        },
+        {
+            "name": "build-windows-msvc-user-release",
+            "displayName": "Release",
+            "description": "Build msvc release on windows (User Mode)",
+            "inherits": "build-common-release",
+            "configurePreset": "windows-msvc-user"
+        },
+        {
+            "name": "build-linux-gcc-debug",
+            "displayName": "Debug",
+            "description": "Build gcc debug on linux",
+            "inherits": "build-common-debug",
+            "configurePreset": "linux-gcc"
+        },
+        {
+            "name": "build-linux-gcc-release",
+            "displayName": "Release",
+            "description": "Build gcc release on linux",
+            "inherits": "build-common-release",
+            "configurePreset": "linux-gcc"
+        },
+        {
+            "name": "build-linux-clang-debug",
+            "displayName": "Debug",
+            "description": "Build clang debug on linux",
+            "inherits": "build-common-debug",
+            "configurePreset": "linux-clang"
+        },
+        {
+            "name": "build-linux-clang-release",
+            "displayName": "Release",
+            "description": "Build clang release on linux",
+            "inherits": "build-common-release",
+            "configurePreset": "linux-clang"
         }
     ],
     "testPresets": [
@@ -217,60 +227,88 @@
             }
         },
         {
-            "name": "test-windows-msvc-debug-developer-mode",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
+            "name": "test-common-debug",
+            "description": "Test CMake settings that apply to debug configurations",
+            "hidden": true,
             "inherits": "test-common",
-            "configurePreset": "windows-msvc-debug-developer-mode"
+            "configuration": "Debug"
         },
         {
-            "name": "test-windows-msvc-release-developer-mode",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
+            "name": "test-common-release",
+            "description": "Test CMake settings that apply to release configurations",
+            "hidden": true,
             "inherits": "test-common",
-            "configurePreset": "windows-msvc-release-developer-mode"
+            "configuration": "Release"
+        },
+        {
+            "name": "test-windows-msvc-developer-debug",
+            "displayName": "Debug",
+            "description": "Set Strict rules for windows msvc (Developer Mode) debug tests",
+            "inherits": "test-common-debug",
+            "configurePreset": "windows-msvc-developer"
+        },
+        {
+            "name": "test-windows-msvc-developer-release",
+            "displayName": "Release",
+            "description": "Set Strict rules for windows msvc (Developer Mode) release tests",
+            "inherits": "test-common-release",
+            "configurePreset": "windows-msvc-developer"
+        },
+        {
+            "name": "test-windows-msvc-user-debug",
+            "displayName": "Debug",
+            "description": "Set Strict rules for windows msvc (User Mode) debug tests",
+            "inherits": "test-common-debug",
+            "configurePreset": "windows-msvc-user"
+        },
+        {
+            "name": "test-windows-msvc-user-release",
+            "displayName": "Release",
+            "description": "Set Strict rules for windows msvc (User Mode) release tests",
+            "inherits": "test-common-release",
+            "configurePreset": "windows-msvc-user"
         },
         {
             "name": "test-windows-clang-debug",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
-            "inherits": "test-common",
-            "configurePreset": "windows-clang-debug"
+            "displayName": "Debug",
+            "description": "Set Strict rules for windows clang debug tests",
+            "inherits": "test-common-debug",
+            "configurePreset": "windows-clang"
         },
         {
             "name": "test-windows-clang-release",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
-            "inherits": "test-common",
-            "configurePreset": "windows-clang-release"
+            "displayName": "Release",
+            "description": "Set Strict rules for windows clang release tests",
+            "inherits": "test-common-release",
+            "configurePreset": "windows-clang"
         },
         {
             "name": "test-unixlike-gcc-debug",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
-            "inherits": "test-common",
-            "configurePreset": "unixlike-gcc-debug"
+            "displayName": "Debug",
+            "description": "Set Strict rules for unixlike gcc debug tests",
+            "inherits": "test-common-debug",
+            "configurePreset": "unixlike-gcc"
         },
         {
             "name": "test-unixlike-gcc-release",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
-            "inherits": "test-common",
-            "configurePreset": "unixlike-gcc-release"
+            "displayName": "Release",
+            "description": "Set Strict rules for unixlike gcc release tests",
+            "inherits": "test-common-release",
+            "configurePreset": "unixlike-gcc"
         },
         {
             "name": "test-unixlike-clang-debug",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
-            "inherits": "test-common",
-            "configurePreset": "unixlike-clang-debug"
+            "displayName": "Debug",
+            "description": "Set Strict rules for unixlike clang debug tests",
+            "inherits": "test-common-debug",
+            "configurePreset": "unixlike-clang"
         },
         {
             "name": "test-unixlike-clang-release",
-            "displayName": "Strict",
-            "description": "Enable output and stop on failure",
-            "inherits": "test-common",
-            "configurePreset": "unixlike-clang-release"
+            "displayName": "Release",
+            "description": "Set Strict rules for unixlike clang release tests",
+            "inherits": "test-common-release",
+            "configurePreset": "unixlike-clang"
         }
     ]
 }
