@@ -96,39 +96,12 @@
             }
         },
         {
-            "name": "config-developer-mode",
-            "description": "Set the flags to enable the development mode",
-            "hidden": true,
-            "cacheVariables": {
-                "ENABLE_DEVELOPER_MODE": "ON"
-            }
-        },
-        {
-            "name": "config-user-mode",
-            "description": "Set the flags to enable the user mode",
-            "hidden": true,
-            "cacheVariables": {
-                "ENABLE_DEVELOPER_MODE": "OFF"
-            }
-        },
-        {
-            "name": "windows-msvc-developer",
-            "displayName": "msvc (Developer Mode)",
-            "description": "Target Windows with the msvc compiler using Developer Mode",
+            "name": "windows-msvc",
+            "displayName": "msvc",
+            "description": "Target Windows with the msvc compiler",
             "inherits": [
                 "config-windows-common",
-                "config-msvc-compiler",
-                "config-developer-mode"
-            ]
-        },
-        {
-            "name": "windows-msvc-user",
-            "displayName": "msvc (User Mode)",
-            "description": "Target Windows with the msvc compiler using User Mode",
-            "inherits": [
-                "config-windows-common",
-                "config-msvc-compiler",
-                "config-user-mode"
+                "config-msvc-compiler"
             ]
         },
         {
@@ -179,32 +152,18 @@
             "configuration": "RelWithDebInfo"
         },
         {
-            "name": "build-windows-msvc-developer-debug",
+            "name": "build-windows-msvc-debug",
             "displayName": "Debug",
-            "description": "Build msvc debug on windows (Developer Mode)",
+            "description": "Build msvc debug on windows",
             "inherits": "build-common-debug",
-            "configurePreset": "windows-msvc-developer"
+            "configurePreset": "windows-msvc"
         },
         {
-            "name": "build-windows-msvc-user-debug",
-            "displayName": "Debug",
-            "description": "Build msvc debug on windows (User Mode)",
-            "inherits": "build-common-debug",
-            "configurePreset": "windows-msvc-user"
-        },
-        {
-            "name": "build-windows-msvc-developer-release",
+            "name": "build-windows-msvc-release",
             "displayName": "Release",
-            "description": "Build msvc release on windows (Developer Mode)",
+            "description": "Build msvc release on windows",
             "inherits": "build-common-release",
-            "configurePreset": "windows-msvc-developer"
-        },
-        {
-            "name": "build-windows-msvc-user-release",
-            "displayName": "Release",
-            "description": "Build msvc release on windows (User Mode)",
-            "inherits": "build-common-release",
-            "configurePreset": "windows-msvc-user"
+            "configurePreset": "windows-msvc"
         },
         {
             "name": "build-linux-gcc-debug",
@@ -263,32 +222,18 @@
             "configuration": "Release"
         },
         {
-            "name": "test-windows-msvc-developer-debug",
+            "name": "test-windows-msvc-debug",
             "displayName": "Debug",
-            "description": "Set Strict rules for windows msvc (Developer Mode) debug tests",
+            "description": "Set Strict rules for windows msvc debug tests",
             "inherits": "test-common-debug",
-            "configurePreset": "windows-msvc-developer"
+            "configurePreset": "windows-msvc"
         },
         {
-            "name": "test-windows-msvc-developer-release",
+            "name": "test-windows-msvc-release",
             "displayName": "Release",
-            "description": "Set Strict rules for windows msvc (Developer Mode) release tests",
+            "description": "Set Strict rules for windows msvc release tests",
             "inherits": "test-common-release",
-            "configurePreset": "windows-msvc-developer"
-        },
-        {
-            "name": "test-windows-msvc-user-debug",
-            "displayName": "Debug",
-            "description": "Set Strict rules for windows msvc (User Mode) debug tests",
-            "inherits": "test-common-debug",
-            "configurePreset": "windows-msvc-user"
-        },
-        {
-            "name": "test-windows-msvc-user-release",
-            "displayName": "Release",
-            "description": "Set Strict rules for windows msvc (User Mode) release tests",
-            "inherits": "test-common-release",
-            "configurePreset": "windows-msvc-user"
+            "configurePreset": "windows-msvc"
         },
         {
             "name": "test-windows-clang-debug",
