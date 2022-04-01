@@ -55,6 +55,47 @@
             }
         },
         {
+            "name": "config-msvc-compiler",
+            "description": "Set cl as the compiler to be used",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl"
+            }
+        },
+        {
+            "name": "config-clangcl-compiler",
+            "description": "Set clang-cl as the compiler to be used",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "intelliSenseMode": "windows-clang-x64"
+                }
+            }
+        },
+        {
+            "name": "config-gcc-compiler",
+            "description": "Set gcc as the compiler to be used",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "config-clang-compiler",
+            "description": "Set clang as the compiler to be used",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
             "name": "config-developer-mode",
             "description": "Set the flags to enable the development mode",
             "hidden": true,
@@ -76,13 +117,9 @@
             "description": "Target Windows with the msvc compiler using Developer Mode",
             "inherits": [
                 "config-windows-common",
+                "config-msvc-compiler",
                 "config-developer-mode"
-            ],
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+            ]
         },
         {
             "name": "windows-msvc-user",
@@ -90,51 +127,36 @@
             "description": "Target Windows with the msvc compiler using User Mode",
             "inherits": [
                 "config-windows-common",
+                "config-msvc-compiler",
                 "config-user-mode"
-            ],
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+            ]
         },
         {
             "name": "windows-clang",
             "displayName": "clang",
             "description": "Target Windows with the clang compiler",
-            "inherits": "config-windows-common",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang-cl",
-                "CMAKE_CXX_COMPILER": "clang-cl",
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "vendor": {
-                "microsoft.com/VisualStudioSettings/CMake/1.0": {
-                    "intelliSenseMode": "windows-clang-x64"
-                }
-            }
+            "inherits": [
+                "config-windows-common",
+                "config-clangcl-compiler"
+            ]
         },
         {
             "name": "unixlike-gcc",
             "displayName": "gcc",
             "description": "Target Unix-like OS with the gcc compiler",
-            "inherits": "config-unixlike-common",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+            "inherits": [
+                "config-unixlike-common",
+                "config-gcc-compiler"
+            ]
         },
         {
             "name": "unixlike-clang",
             "displayName": "clang",
             "description": "Target Unix-like OS with the clang compiler",
-            "inherits": "config-unixlike-common",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+            "inherits": [
+                "config-unixlike-common",
+                "config-clang-compiler"
+            ]
         }
     ],
     "buildPresets": [
