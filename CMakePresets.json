@@ -35,17 +35,13 @@
             "name": "config-linux-common",
             "description": "Linux settings for gcc and clang toolchains",
             "hidden": true,
-            "inherits": "config-common",
             "condition": {
-                "type": "equals",
+                "type": "notEquals",
                 "lhs": "${hostSystemName}",
-                "rhs": "Linux"
+                "rhs": "Windows"
             },
-            "vendor": {
-                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-                }
-            }
+            "binaryDir": "${sourceDir}/build",
+            "inherits": "config-common"
         },
         {
             "name": "windows-msvc",
@@ -133,31 +129,17 @@
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "build-linux-gcc-debug",
+            "name": "linux-gcc",
             "displayName": "Debug",
             "description": "Build gcc debug on linux",
             "inherits": "build-common-debug",
             "configurePreset": "linux-gcc"
         },
         {
-            "name": "build-linux-gcc-release",
-            "displayName": "Release",
-            "description": "Build gcc release on linux",
-            "inherits": "build-common-release",
-            "configurePreset": "linux-gcc"
-        },
-        {
-            "name": "build-linux-clang-debug",
+            "name": "linux-clang",
             "displayName": "Debug",
             "description": "Build clang debug on linux",
             "inherits": "build-common-debug",
-            "configurePreset": "linux-clang"
-        },
-        {
-            "name": "build-linux-clang-release",
-            "displayName": "Release",
-            "description": "Build clang release on linux",
-            "inherits": "build-common-release",
             "configurePreset": "linux-clang"
         }
     ],
@@ -203,31 +185,17 @@
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "test-linux-gcc-debug",
+            "name": "linux-gcc",
             "displayName": "Debug",
             "description": "Set Strict rules for linux gcc debug tests",
             "inherits": "test-common-debug",
             "configurePreset": "linux-gcc"
         },
         {
-            "name": "test-linux-gcc-release",
-            "displayName": "Release",
-            "description": "Set Strict rules for linux gcc release tests",
-            "inherits": "test-common-release",
-            "configurePreset": "linux-gcc"
-        },
-        {
-            "name": "test-linux-clang-debug",
+            "name": "linux-clang",
             "displayName": "Debug",
             "description": "Set Strict rules for linux clang debug tests",
             "inherits": "test-common-debug",
-            "configurePreset": "linux-clang"
-        },
-        {
-            "name": "test-linux-clang-release",
-            "displayName": "Release",
-            "description": "Set Strict rules for linux clang release tests",
-            "inherits": "test-common-release",
             "configurePreset": "linux-clang"
         }
     ]
