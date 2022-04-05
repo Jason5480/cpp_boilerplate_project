@@ -118,7 +118,7 @@
         {
             "name": "unixlike-gcc",
             "displayName": "gcc",
-            "description": "Target Unix-like OS with the gcc compiler",
+            "description": "Target unix-like OS with the gcc compiler",
             "inherits": [
                 "config-unixlike-common",
                 "config-gcc-compiler"
@@ -168,32 +168,32 @@
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "build-linux-gcc-debug",
+            "name": "build-unixlike-gcc-debug",
             "displayName": "Debug",
-            "description": "Build gcc debug on linux",
+            "description": "Build gcc debug on unixlike OS",
             "inherits": "build-common-debug",
-            "configurePreset": "linux-gcc"
+            "configurePreset": "unixlike-gcc"
         },
         {
-            "name": "build-linux-gcc-release",
+            "name": "build-unixlike-gcc-release",
             "displayName": "Release",
-            "description": "Build gcc release on linux",
+            "description": "Build gcc release on unixlike OS",
             "inherits": "build-common-release",
-            "configurePreset": "linux-gcc"
+            "configurePreset": "unixlike-gcc"
         },
         {
-            "name": "build-linux-clang-debug",
+            "name": "build-unixlike-clang-debug",
             "displayName": "Debug",
-            "description": "Build clang debug on linux",
+            "description": "Build clang debug on unixlike OS",
             "inherits": "build-common-debug",
-            "configurePreset": "linux-clang"
+            "configurePreset": "unixlike-clang"
         },
         {
-            "name": "build-linux-clang-release",
+            "name": "build-unixlike-clang-release",
             "displayName": "Release",
-            "description": "Build clang release on linux",
+            "description": "Build clang release on unixlike OS",
             "inherits": "build-common-release",
-            "configurePreset": "linux-clang"
+            "configurePreset": "unixlike-clang"
         }
     ],
     "testPresets": [
