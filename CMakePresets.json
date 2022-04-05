@@ -10,7 +10,9 @@
             "name": "config-common",
             "description": "General settings that apply to all configurations",
             "hidden": true,
-            "generator": "Ninja Multi-Config"
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}"
         },
         {
             "name": "config-windows-common",
