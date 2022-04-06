@@ -10,7 +10,7 @@
             "name": "common",
             "description": "General settings that apply to all configurations",
             "hidden": true,
-            "generator": "Ninja Multi-Config"
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/build",
             "installDir": "${sourceDir}/out/stage"
         },
