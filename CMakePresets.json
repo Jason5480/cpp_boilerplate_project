@@ -10,8 +10,9 @@
             "name": "common",
             "description": "General settings that apply to all configurations",
             "hidden": true,
-            "binaryDir": "${sourceDir}/build",
             "generator": "Ninja Multi-Config"
+            "binaryDir": "${sourceDir}/build",
+            "installDir": "${sourceDir}/out/stage"
         },
         {
             "name": "windows-common",
@@ -117,7 +118,7 @@
         {
             "name": "unixlike-gcc",
             "displayName": "gcc",
-            "description": "Target Unix-like OS with the gcc compiler",
+            "description": "Target unix-like OS with the gcc compiler",
             "inherits": [
                 "unixlike-common",
                 "gcc-compiler"
