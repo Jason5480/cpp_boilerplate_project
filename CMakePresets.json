@@ -7,16 +7,17 @@
     },
     "configurePresets": [
         {
-            "name": "config-common",
+            "name": "common",
             "description": "General settings that apply to all configurations",
             "hidden": true,
+            "binaryDir": "${sourceDir}/build",
             "generator": "Ninja Multi-Config"
         },
         {
-            "name": "config-windows-common",
+            "name": "windows-common",
             "description": "Windows settings for MSBuild toolchain that apply to msvc and clang",
             "hidden": true,
-            "inherits": "config-common",
+            "inherits": "common",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -36,10 +37,10 @@
             }
         },
         {
-            "name": "config-unixlike-common",
+            "name": "unixlike-common",
             "description": "Unix-like OS settings for gcc and clang toolchains",
             "hidden": true,
-            "inherits": "config-common",
+            "inherits": "common",
             "condition": {
                 "type": "inList",
                 "string": "${hostSystemName}",
@@ -55,7 +56,7 @@
             }
         },
         {
-            "name": "config-msvc-compiler",
+            "name": "msvc-compiler",
             "description": "Set cl as the compiler to be used",
             "hidden": true,
             "cacheVariables": {
@@ -64,7 +65,7 @@
             }
         },
         {
-            "name": "config-clangcl-compiler",
+            "name": "clangcl-compiler",
             "description": "Set clang-cl as the compiler to be used",
             "hidden": true,
             "cacheVariables": {
@@ -78,7 +79,7 @@
             }
         },
         {
-            "name": "config-gcc-compiler",
+            "name": "gcc-compiler",
             "description": "Set gcc as the compiler to be used",
             "hidden": true,
             "cacheVariables": {
@@ -87,7 +88,7 @@
             }
         },
         {
-            "name": "config-clang-compiler",
+            "name": "clang-compiler",
             "description": "Set clang as the compiler to be used",
             "hidden": true,
             "cacheVariables": {
@@ -100,8 +101,8 @@
             "displayName": "msvc",
             "description": "Target Windows with the msvc compiler",
             "inherits": [
-                "config-windows-common",
-                "config-msvc-compiler"
+                "windows-common",
+                "msvc-compiler"
             ]
         },
         {
@@ -109,8 +110,8 @@
             "displayName": "clang",
             "description": "Target Windows with the clang compiler",
             "inherits": [
-                "config-windows-common",
-                "config-clangcl-compiler"
+                "windows-common",
+                "clangcl-compiler"
             ]
         },
         {
@@ -118,8 +119,8 @@
             "displayName": "gcc",
             "description": "Target Unix-like OS with the gcc compiler",
             "inherits": [
-                "config-unixlike-common",
-                "config-gcc-compiler"
+                "unixlike-common",
+                "gcc-compiler"
             ]
         },
         {
@@ -127,76 +128,76 @@
             "displayName": "clang",
             "description": "Target Unix-like OS with the clang compiler",
             "inherits": [
-                "config-unixlike-common",
-                "config-clang-compiler"
+                "unixlike-common",
+                "clang-compiler"
             ]
         }
     ],
     "buildPresets": [
         {
-            "name": "build-common-debug",
+            "name": "common-debug",
             "description": "Set build type to Debug",
             "hidden": true,
             "configuration": "Debug"
         },
         {
-            "name": "build-common-release",
+            "name": "common-release",
             "description": "Set build type to Release",
             "hidden": true,
             "configuration": "Release"
         },
         {
-            "name": "build-common-relwithdebinfo",
+            "name": "common-relwithdebinfo",
             "description": "Set build type to Release",
             "hidden": true,
             "configuration": "RelWithDebInfo"
         },
         {
-            "name": "build-windows-msvc-debug",
+            "name": "windows-msvc-debug",
             "displayName": "Debug",
             "description": "Build msvc debug on windows",
-            "inherits": "build-common-debug",
+            "inherits": "common-debug",
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "build-windows-msvc-release",
+            "name": "windows-msvc-release",
             "displayName": "Release",
             "description": "Build msvc release on windows",
-            "inherits": "build-common-release",
+            "inherits": "common-release",
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "build-linux-gcc-debug",
+            "name": "gcc-debug",
             "displayName": "Debug",
             "description": "Build gcc debug on linux",
-            "inherits": "build-common-debug",
-            "configurePreset": "linux-gcc"
+            "inherits": "common-debug",
+            "configurePreset": "unixlike-gcc"
         },
         {
-            "name": "build-linux-gcc-release",
+            "name": "gcc-release",
             "displayName": "Release",
             "description": "Build gcc release on linux",
-            "inherits": "build-common-release",
-            "configurePreset": "linux-gcc"
+            "inherits": "common-release",
+            "configurePreset": "unixlike-gcc"
         },
         {
-            "name": "build-linux-clang-debug",
+            "name": "clang-debug",
             "displayName": "Debug",
             "description": "Build clang debug on linux",
-            "inherits": "build-common-debug",
-            "configurePreset": "linux-clang"
+            "inherits": "common-debug",
+            "configurePreset": "unixlike-clang"
         },
         {
-            "name": "build-linux-clang-release",
+            "name": "clang-release",
             "displayName": "Release",
             "description": "Build clang release on linux",
-            "inherits": "build-common-release",
-            "configurePreset": "linux-clang"
+            "inherits": "common-release",
+            "configurePreset": "unixlike-clang"
         }
     ],
     "testPresets": [
         {
-            "name": "test-common",
+            "name": "common",
             "description": "Test CMake settings that apply to all configurations",
             "hidden": true,
             "output": {
@@ -208,73 +209,73 @@
             }
         },
         {
-            "name": "test-common-debug",
+            "name": "common-debug",
             "description": "Test CMake settings that apply to debug configurations",
             "hidden": true,
-            "inherits": "test-common",
+            "inherits": "common",
             "configuration": "Debug"
         },
         {
-            "name": "test-common-release",
+            "name": "common-release",
             "description": "Test CMake settings that apply to release configurations",
             "hidden": true,
-            "inherits": "test-common",
+            "inherits": "common",
             "configuration": "Release"
         },
         {
-            "name": "test-windows-msvc-debug",
+            "name": "windows-msvc-debug",
             "displayName": "Debug",
             "description": "Set Strict rules for windows msvc debug tests",
-            "inherits": "test-common-debug",
+            "inherits": "common-debug",
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "test-windows-msvc-release",
+            "name": "windows-msvc-release",
             "displayName": "Release",
             "description": "Set Strict rules for windows msvc release tests",
-            "inherits": "test-common-release",
+            "inherits": "common-release",
             "configurePreset": "windows-msvc"
         },
         {
-            "name": "test-windows-clang-debug",
+            "name": "windows-clang-debug",
             "displayName": "Debug",
             "description": "Set Strict rules for windows clang debug tests",
-            "inherits": "test-common-debug",
+            "inherits": "common-debug",
             "configurePreset": "windows-clang"
         },
         {
-            "name": "test-windows-clang-release",
+            "name": "windows-clang-release",
             "displayName": "Release",
             "description": "Set Strict rules for windows clang release tests",
-            "inherits": "test-common-release",
+            "inherits": "common-release",
             "configurePreset": "windows-clang"
         },
         {
-            "name": "test-unixlike-gcc-debug",
+            "name": "gcc-debug",
             "displayName": "Debug",
             "description": "Set Strict rules for unixlike gcc debug tests",
-            "inherits": "test-common-debug",
+            "inherits": "common-debug",
             "configurePreset": "unixlike-gcc"
         },
         {
-            "name": "test-unixlike-gcc-release",
+            "name": "gcc-release",
             "displayName": "Release",
             "description": "Set Strict rules for unixlike gcc release tests",
-            "inherits": "test-common-release",
+            "inherits": "common-release",
             "configurePreset": "unixlike-gcc"
         },
         {
-            "name": "test-unixlike-clang-debug",
+            "name": "clang-debug",
             "displayName": "Debug",
             "description": "Set Strict rules for unixlike clang debug tests",
-            "inherits": "test-common-debug",
+            "inherits": "common-debug",
             "configurePreset": "unixlike-clang"
         },
         {
-            "name": "test-unixlike-clang-release",
+            "name": "clang-release",
             "displayName": "Release",
             "description": "Set Strict rules for unixlike clang release tests",
-            "inherits": "test-common-release",
+            "inherits": "common-release",
             "configurePreset": "unixlike-clang"
         }
     ]
