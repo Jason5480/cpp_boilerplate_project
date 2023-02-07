@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16...3.23)
+cmake_minimum_required(VERSION 3.21...3.25)
 
 # Not ideal to use this global variable, but necessary to make sure
 # that tooling and projects use the same version
